@@ -1,0 +1,10 @@
+# Dependencies
+node_modules/
+# Build artifacts
+.wrangler/
+.dev.vars
+# OS
+.DS_Store
+Thumbs.db
+# Logs
+*.log

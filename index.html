@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Quiet Ocean — Interactive Brief</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#06101f">
+<meta name="description" content="An international standards body is finalizing plans for an underwater Internet of Things — a global network transmitting data through sound, at 160–250 dB, around the clock. This is what that means.">
+<meta property="og:title" content="The Quiet Ocean — Interactive Brief">
+<meta property="og:description" content="The ocean is about to get much louder. A 6-minute interactive brief on the underwater acoustic internet — and the quiet alternative.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#06101f;
+  --bg-1:oklch(8% .03 255);
+  --bg-2:oklch(10% .04 235);
+  --bg-3:oklch(14% .05 220);
+  --ink:oklch(96% .01 220);
+  --ink-2:oklch(78% .02 230);
+  --ink-3:oklch(60% .02 230);
+  --ink-4:oklch(45% .02 230);
+  --line:rgba(255,255,255,.08);
+  --line-2:rgba(255,255,255,.05);
+  --cyan:oklch(85% .12 200);
+  --cyan-d:oklch(88% .12 200);
+  --amber:oklch(82% .15 65);
+  --red:oklch(78% .2 30);
+  --serif:'Instrument Serif',Georgia,serif;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{overflow-x:hidden;line-height:1.5}
+img,svg,canvas{display:block;max-width:100%}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:var(--cyan);text-decoration:none}
+input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;width:100%}
+input[type=range]::-webkit-slider-runnable-track{height:4px;background:rgba(255,255,255,.1);border-radius:2px}
+input[type=range]::-moz-range-track{height:4px;background:rgba(255,255,255,.1);border-radius:2px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--cyan);margin-top:-7px;border:0;box-shadow:0 0 12px oklch(85% .12 200 / .5)}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--cyan);border:0}
+input[type=range]:disabled::-webkit-slider-thumb{background:var(--ink-4)}
+input[type=range]:disabled::-moz-range-thumb{background:var(--ink-4)}
+
+/* ---------- Header ---------- */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  padding:14px 20px;display:flex;align-items:center;justify-content:space-between;
+  background:linear-gradient(180deg,oklch(6% .03 260 / .85),transparent);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--ink-2);
+}
+header .brand{display:flex;align-items:center;gap:10px}
+header .brand strong{color:var(--ink);font-weight:500}
+header .brand .dot{color:var(--ink-4)}
+header .meta{display:flex;gap:20px;color:var(--ink-3)}
+@media(max-width:520px){
+  header{padding:12px 16px;font-size:10px}
+  header .meta span:first-child{display:none}
+}
+
+/* ---------- Side rail (desktop only) ---------- */
+.rail{
+  position:fixed;right:24px;top:50%;transform:translateY(-50%);z-index:40;
+  display:flex;flex-direction:column;gap:12px;font-family:var(--mono);
+}
+.rail a{
+  display:flex;align-items:center;gap:10px;
+  color:var(--ink-4);text-decoration:none;font-size:10px;letter-spacing:.15em;
+  text-transform:uppercase;justify-content:flex-end;
+}
+.rail a .lab{opacity:0;transition:opacity .2s}
+.rail a .bar{width:16px;height:1px;background:var(--ink-4);transition:width .25s,background .25s}
+.rail a.active{color:var(--cyan-d)}
+.rail a.active .lab{opacity:1}
+.rail a.active .bar{width:24px;background:var(--cyan)}
+@media(max-width:900px){.rail{display:none}}
+
+/* ---------- Bottom rail (mobile) ---------- */
+.brail{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:max(14px,env(safe-area-inset-bottom));
+  z-index:40;display:none;gap:14px;
+  background:rgba(8,16,30,.7);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid var(--line);border-radius:999px;padding:8px 12px;
+}
+.brail a{width:8px;height:8px;border-radius:50%;background:var(--ink-4);transition:background .2s,transform .2s}
+.brail a.active{background:var(--cyan);transform:scale(1.4)}
+@media(max-width:900px){.brail{display:flex}}
+
+/* ---------- Common ---------- */
+.wrap{max-width:1200px;margin:0 auto}
+.section{padding:96px 20px 80px;position:relative}
+.section h2{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(34px,7vw,72px);line-height:1.02;letter-spacing:-.015em;
+  color:var(--ink);max-width:1000px;
+}
+.section h2 em{font-style:italic;color:var(--cyan)}
+.lede{
+  max-width:640px;margin-top:18px;font-size:clamp(15px,3.6vw,16.5px);line-height:1.55;
+  color:var(--ink-2);
+}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:4px 10px;border-radius:999px;font-size:10.5px;
+  letter-spacing:.08em;text-transform:uppercase;
+  font-family:var(--mono);background:rgba(255,255,255,.05);
+  color:oklch(75% .02 230);border:1px solid rgba(255,255,255,.08);
+}
+.chip-cyan{background:oklch(85% .12 200 / .12);color:var(--cyan);border-color:oklch(85% .12 200 / .35)}
+.chip-amber{background:oklch(75% .15 65 / .14);color:var(--amber);border-color:oklch(82% .15 65 / .4)}
+
+/* ---------- Intro ---------- */
+#intro{
+  min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:max(80px,12vh) 20px max(80px,12vh);position:relative;
+  background:radial-gradient(ellipse at 50% 60%,oklch(14% .05 220) 0%,var(--bg) 70%);
+}
+#intro .wrap{max-width:1100px}
+#intro h1{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(44px,11vw,128px);line-height:.96;letter-spacing:-.02em;
+  color:var(--ink);
+}
+#intro h1 em{font-style:italic;color:var(--cyan)}
+#intro .strong-amber{color:var(--amber);font-weight:600}
+#intro p{
+  max-width:620px;margin-top:24px;font-size:clamp(15px,4vw,18px);line-height:1.55;
+  color:var(--ink-2);
+}
+#intro .descend{
+  margin-top:48px;align-self:flex-start;
+  background:var(--cyan);color:oklch(12% .03 255);
+  padding:14px 24px;border-radius:2px;
+  font-family:var(--mono);font-size:12px;letter-spacing:.15em;
+  text-transform:uppercase;font-weight:600;
+  box-shadow:0 0 40px oklch(85% .12 200 / .25);
+}
+#intro .descend:hover{filter:brightness(1.08)}
+#intro .footnote{
+  margin-top:64px;padding-top:24px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-4);
+}
+
+/* ---------- Listen ---------- */
+#listen .grid{
+  display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:24px;align-items:start;
+  margin-top:32px;
+}
+@media(max-width:900px){#listen .grid{grid-template-columns:1fr}}
+.viewport{
+  position:relative;border:1px solid var(--line);border-radius:2px;overflow:hidden;
+  background:oklch(10% .03 250);aspect-ratio:16/11;
+}
+@media(max-width:520px){.viewport{aspect-ratio:4/5}}
+.viewport canvas{width:100%;height:100%;position:absolute;inset:0}
+.hud-tl{
+  position:absolute;top:12px;left:12px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.1em;
+  color:oklch(85% .08 200);display:flex;flex-direction:column;gap:4px;
+}
+.hud-tl .date{color:var(--ink-3)}
+.hud-bot{
+  position:absolute;bottom:10px;left:10px;right:10px;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
+  font-family:var(--mono);font-size:11px;color:var(--ink-2);
+  background:rgba(0,0,0,.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  padding:8px 10px;border:1px solid rgba(255,255,255,.06);
+}
+@media(max-width:520px){
+  .hud-bot{grid-template-columns:repeat(2,1fr);font-size:10.5px}
+}
+.hud-bot .lab{color:var(--ink-4);font-size:9px;text-transform:uppercase;letter-spacing:.15em}
+.hud-bot .val{font-size:16px;color:oklch(90% .02 220);margin-top:2px}
+.hud-bot .val.warn{color:var(--amber)}
+.hud-bot .small{font-size:10px;opacity:.65}
+
+.controls{
+  border:1px solid var(--line);padding:20px;
+  background:oklch(10% .03 250 / .6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  position:sticky;top:80px;
+}
+@media(max-width:900px){.controls{position:static;top:auto}}
+.controls .label{font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);margin-bottom:14px}
+.modes{display:grid;grid-template-columns:1fr 1fr;border:1px solid rgba(255,255,255,.1);margin-bottom:20px}
+.modes button{
+  padding:12px 8px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;color:oklch(70% .02 230);border-right:1px solid rgba(255,255,255,.1);
+  transition:background .15s,color .15s;
+}
+.modes button:last-child{border-right:0}
+.modes button.on-acoustic{background:oklch(75% .15 65 / .18);color:oklch(85% .15 65)}
+.modes button.on-fiber{background:oklch(85% .12 200 / .18);color:var(--cyan-d)}
+.dial{margin-bottom:14px}
+.dial-head{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:10px}
+.dial-head .v{color:var(--cyan);font-size:14px}
+.dial-ticks{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9.5px;color:oklch(45% .02 230);margin-top:6px;letter-spacing:.1em}
+.dial-ticks .planned{color:oklch(78% .15 50)}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin:18px 0}
+.presets button{
+  flex:1 1 0;min-width:60px;padding:8px 4px;text-align:center;
+  border:1px solid rgba(255,255,255,.1);color:oklch(75% .02 230);
+  font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  transition:background .15s;
+}
+.presets button.active{background:rgba(255,255,255,.08)}
+.presets button .v{display:block;opacity:.55;font-size:9px;margin-top:2px}
+.audio-btn{
+  width:100%;padding:12px 16px;border:1px solid rgba(255,255,255,.15);
+  font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:oklch(85% .02 230);margin-bottom:12px;transition:all .15s;
+}
+.audio-btn.on{background:oklch(85% .12 200 / .15);border-color:oklch(85% .12 200 / .4);color:var(--cyan-d)}
+.audio-note{font-size:11.5px;line-height:1.5;color:var(--ink-3);font-family:var(--mono)}
+
+/* ---------- Impact ---------- */
+#impact{background:linear-gradient(180deg,var(--bg-1) 0%,oklch(6% .03 260) 100%)}
+.adjust{
+  margin-top:30px;padding:14px 16px;border:1px solid var(--line);
+  background:oklch(10% .03 250 / .5);
+  display:flex;align-items:center;gap:14px;
+}
+.adjust .lab{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
+.adjust .val{font-family:var(--mono);font-size:14px;color:var(--cyan);min-width:62px;text-align:right}
+@media(max-width:520px){.adjust .lab{display:none}}
+
+.species-list{margin-top:20px}
+.species{
+  display:grid;grid-template-columns:170px 1fr 1fr 110px;
+  gap:20px;padding:16px 0;align-items:center;
+  border-bottom:1px solid var(--line-2);
+}
+.species .name{font-family:var(--serif);font-size:22px;color:oklch(90% .02 220);transition:color .3s}
+.species.affected .name{color:oklch(90% .08 55)}
+.species .depth{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4);margin-top:2px}
+.species .bar{position:relative;height:8px;background:rgba(255,255,255,.04);border-radius:1px}
+.species .bar-base{position:absolute;left:0;top:0;bottom:0;background:rgba(255,255,255,.08)}
+.species .bar-fill{position:absolute;left:0;top:0;bottom:0;background:oklch(55% .05 210);transition:width .15s,background .3s}
+.species.affected .bar-fill{background:oklch(70% .25 50)}
+.species .bar-tick{position:absolute;top:-4px;bottom:-4px;width:2px;background:oklch(90% .05 90)}
+.species .effect{font-size:13.5px;color:var(--ink-3);line-height:1.4;transition:color .3s}
+.species.affected .effect{color:oklch(85% .04 50)}
+.species .meta{text-align:right;font-family:var(--mono);font-size:11px;letter-spacing:.1em}
+.species .meta .thr{color:var(--ink-3)}
+.species .meta .stat{margin-top:4px;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:oklch(55% .08 160)}
+.species.affected .meta .stat{color:oklch(82% .18 50)}
+
+@media(max-width:760px){
+  .species{grid-template-columns:1fr;gap:8px;padding:14px 0}
+  .species .meta{text-align:left;display:flex;gap:14px;align-items:center}
+  .species .effect{font-size:13px}
+}
+
+.tally{
+  margin-top:32px;padding:18px;
+  border:1px solid oklch(82% .15 65 / .3);
+  background:oklch(75% .15 65 / .05);
+  display:flex;gap:16px;align-items:center;
+}
+.tally .num{font-family:var(--serif);font-size:48px;color:oklch(82% .18 55);line-height:1;flex:0 0 auto}
+.tally .h{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--amber);margin-bottom:4px}
+.tally .b{color:oklch(90% .02 220);font-size:14.5px;line-height:1.45}
+.tally .b strong{color:var(--amber)}
+
+/* ---------- Range ---------- */
+#range .map{
+  margin-top:28px;border:1px solid var(--line);border-radius:2px;
+  background:oklch(9% .03 250);position:relative;overflow:hidden;
+}
+#range .map svg{width:100%;display:block;height:auto;aspect-ratio:1400/500}
+@media(max-width:520px){#range .map svg{aspect-ratio:1400/720}}
+.metrics{margin-top:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:760px){.metrics{grid-template-columns:repeat(2,1fr)}}
+.metric{border:1px solid var(--line);padding:14px;background:oklch(10% .03 250 / .5)}
+.metric .h{font-family:var(--mono);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-4)}
+.metric .v{font-family:var(--serif);font-size:clamp(24px,4.5vw,34px);color:oklch(88% .1 210);line-height:1.1;margin-top:4px}
+.metric .s{font-size:12px;color:var(--ink-3);margin-top:4px}
+
+/* ---------- Compare ---------- */
+#compare{background:linear-gradient(180deg,oklch(6% .03 260) 0%,var(--bg-2) 100%)}
+.compare-tbl{
+  margin-top:32px;display:grid;grid-template-columns:240px 1fr 1fr;
+  border:1px solid var(--line);
+}
+.compare-tbl > *{padding:14px 18px;border-top:1px solid var(--line-2);border-right:1px solid var(--line)}
+.compare-tbl > *:nth-child(3n){border-right:0}
+.compare-tbl .head-spacer{padding:18px;border-top:0}
+.compare-tbl .head{padding:18px;border-top:0;text-align:left}
+.compare-tbl .head .opt{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase}
+.compare-tbl .head .name{font-family:var(--serif);font-size:24px;margin-top:4px}
+.compare-tbl .head.acoustic{color:var(--amber)}
+.compare-tbl .head.acoustic .name{color:oklch(90% .06 55)}
+.compare-tbl .head.fiber{color:var(--cyan)}
+.compare-tbl .head.fiber .name{color:oklch(90% .04 200)}
+.compare-tbl .head.acoustic.sel{background:oklch(75% .15 65 / .08)}
+.compare-tbl .head.fiber.sel{background:oklch(85% .12 200 / .1)}
+.compare-tbl .row-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.compare-tbl .cell{font-size:14px}
+.compare-tbl .cell.acoustic{color:oklch(88% .05 55)}
+.compare-tbl .cell.fiber{color:oklch(88% .04 200)}
+.compare-tbl .cell.acoustic.sel{background:oklch(75% .15 65 / .04)}
+.compare-tbl .cell.fiber.sel{background:oklch(85% .12 200 / .05)}
+
+/* Compare — mobile accordion (parallel to desktop table) */
+.compare-acc{display:none}
+.compare-acc-toggle{
+  display:none;width:100%;margin-top:10px;padding:10px;
+  border:1px solid var(--line);background:transparent;color:var(--ink-3);
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;
+}
+
+@media(max-width:760px){
+  .compare-tbl{display:none}
+  .compare-acc{display:block;margin-top:24px}
+  .compare-acc-toggle{display:block}
+
+  .compare-acc .head-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+  .compare-acc .head{
+    padding:14px 14px;border:1px solid var(--line);background:transparent;text-align:left;
+    transition:background .15s,border-color .15s;
+  }
+  .compare-acc .head .opt{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase}
+  .compare-acc .head .name{font-family:var(--serif);font-size:18px;margin-top:4px;line-height:1.1}
+  .compare-acc .head.acoustic{color:var(--amber)}
+  .compare-acc .head.acoustic .name{color:oklch(90% .06 55)}
+  .compare-acc .head.fiber{color:var(--cyan)}
+  .compare-acc .head.fiber .name{color:oklch(90% .04 200)}
+  .compare-acc .head.acoustic.sel{background:oklch(75% .15 65 / .08);border-color:oklch(82% .15 65 / .4)}
+  .compare-acc .head.fiber.sel{background:oklch(85% .12 200 / .1);border-color:oklch(85% .12 200 / .4)}
+
+  .cmp-row{
+    display:block;border:1px solid var(--line);
+    background:oklch(8% .03 250 / .4);margin-bottom:8px;
+  }
+  .cmp-row > summary{
+    list-style:none;cursor:pointer;
+    padding:13px 14px;
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+    color:oklch(82% .02 230);
+    -webkit-tap-highlight-color:transparent;
+  }
+  .cmp-row > summary::-webkit-details-marker{display:none}
+  .cmp-row > summary .caret{
+    display:inline-block;transition:transform .2s;color:var(--ink-3);
+    font-family:var(--mono);font-size:13px;
+  }
+  .cmp-row[open] > summary{
+    border-bottom:1px solid var(--line-2);
+    color:var(--cyan-d);
+    background:oklch(10% .03 250 / .6);
+  }
+  .cmp-row[open] > summary .caret{transform:rotate(180deg);color:var(--cyan)}
+
+  .cmp-row .cell{padding:11px 14px;font-size:13.5px;line-height:1.45}
+  .cmp-row .cell:first-of-type{padding-top:14px}
+  .cmp-row .cell + .cell{border-top:1px solid var(--line-2)}
+  .cmp-row .cell.acoustic{color:oklch(88% .05 55)}
+  .cmp-row .cell.fiber{color:oklch(88% .04 200)}
+  .cmp-row .cell.acoustic::before{
+    content:'Acoustic';font-family:var(--mono);font-size:9px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--amber);display:block;margin-bottom:5px;
+  }
+  .cmp-row .cell.fiber::before{
+    content:'Fiber-optic';font-family:var(--mono);font-size:9px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--cyan);display:block;margin-bottom:5px;
+  }
+}
+
+/* ---------- Act ---------- */
+#act{
+  background:linear-gradient(180deg,var(--bg-2) 0%,var(--bg-3) 100%);
+  padding:120px 20px 160px;
+}
+#act h2{font-size:clamp(40px,9vw,108px);line-height:.98}
+.steps{margin-top:40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.step{border:1px solid rgba(255,255,255,.1);padding:22px;background:oklch(8% .02 250 / .5)}
+.step .n{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--cyan)}
+.step .t{font-family:var(--serif);font-size:26px;margin-top:8px;color:oklch(94% .02 220)}
+.step p{font-size:14px;line-height:1.55;color:oklch(72% .02 230);margin-top:10px}
+.step a{
+  display:inline-block;margin-top:14px;
+  border:1px solid oklch(85% .12 200 / .4);
+  color:var(--cyan);padding:9px 14px;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;
+}
+.step a:hover{background:oklch(85% .12 200 / .08)}
+
+.endcap{margin-top:64px;padding-top:32px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:18px}
+.endcap .h{font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3)}
+.endcap .b{font-family:var(--serif);font-size:clamp(28px,5vw,38px);margin-top:6px;color:oklch(92% .02 220)}
+.endcap button{
+  background:transparent;border:1px solid rgba(255,255,255,.2);
+  color:oklch(85% .02 230);padding:11px 20px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+}
+
+footer{
+  padding:30px 20px 60px;text-align:center;
+  font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--ink-4);
+}
+footer a{color:var(--ink-3)}
+
+/* ---------- Reduced motion ---------- */
+@media(prefers-reduced-motion:reduce){
+  *{transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
+      <circle cx="11" cy="11" r="2.5" fill="oklch(85% .12 200)"/>
+      <circle cx="11" cy="11" r="6" fill="none" stroke="oklch(85% .12 200 / .7)"/>
+      <circle cx="11" cy="11" r="10" fill="none" stroke="oklch(85% .12 200 / .35)"/>
+    </svg>
+    <strong>Quiet Ocean</strong>
+    <span class="dot">· Interactive Brief</span>
+  </div>
+  <div class="meta"><span>v01</span><span>2026.04</span></div>
+</header>
+
+<nav class="rail" aria-label="Sections">
+  <a href="#intro" data-stop="intro"><span class="lab">Intro</span><span class="bar"></span></a>
+  <a href="#listen" data-stop="listen"><span class="lab">Listen</span><span class="bar"></span></a>
+  <a href="#impact" data-stop="impact"><span class="lab">Impact</span><span class="bar"></span></a>
+  <a href="#range" data-stop="range"><span class="lab">Range</span><span class="bar"></span></a>
+  <a href="#compare" data-stop="compare"><span class="lab">Compare</span><span class="bar"></span></a>
+  <a href="#act" data-stop="act"><span class="lab">Act</span><span class="bar"></span></a>
+</nav>
+<nav class="brail" aria-label="Sections">
+  <a href="#intro" data-stop="intro"></a>
+  <a href="#listen" data-stop="listen"></a>
+  <a href="#impact" data-stop="impact"></a>
+  <a href="#range" data-stop="range"></a>
+  <a href="#compare" data-stop="compare"></a>
+  <a href="#act" data-stop="act"></a>
+</nav>
+
+<!-- ============== INTRO ============== -->
+<section id="intro">
+  <div class="wrap">
+    <div class="chips"><span class="chip chip-cyan">◉ Interactive brief · 6 min</span></div>
+    <h1>The ocean<br><em>is about to get</em><br>much louder.</h1>
+    <p>
+      An international standards body is finalizing plans for an underwater
+      Internet of Things — a global network transmitting data through the water
+      itself, using sound. At <span class="strong-amber">160–250 decibels, around the clock</span>, across every ocean.
+    </p>
+    <p>This is what that means — for the whales, the reefs, the fish, and eventually us. Scroll, drag, listen.</p>
+    <button class="descend" onclick="document.getElementById('listen').scrollIntoView({behavior:'smooth',block:'start'})">Descend ↓</button>
+    <div class="footnote">
+      <span>◉ Record · 47.3°N 8.2°W</span>
+      <span>Depth 0 m</span>
+      <span>Ambient 82 dB</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============== LISTEN ============== -->
+<section id="listen" class="section">
+  <div class="wrap">
+    <div class="chips">
+      <span class="chip chip-cyan">◉ 01 / Listen</span>
+      <span class="chip">depth 250 m</span>
+      <span class="chip">north atlantic</span>
+    </div>
+    <h2>Turn the dial. Meet the network as a whale would.</h2>
+    <p class="lede">Five acoustic nodes. Each pulses data through the water as pressure waves. Drag the decibel dial to hear and see what changes as the network scales up to its planned operational range.</p>
+
+    <div class="grid">
+      <div class="viewport">
+        <canvas id="ocean" aria-hidden="true"></canvas>
+        <div class="hud-tl">
+          <div>◉ LIVE · HYDROPHONE 7B</div>
+          <div class="date" id="hud-date"></div>
+        </div>
+        <div class="hud-bot">
+          <div><div class="lab">level</div><div class="val" id="hud-db">140<span class="small"> dB re 1μPa</span></div></div>
+          <div><div class="lab">range</div><div class="val" id="hud-range">5.0<span class="small"> km</span></div></div>
+          <div><div class="lab">sounds like</div><div class="val" style="font-size:13px;margin-top:4px" id="hud-like">Cargo ship at 100 m</div></div>
+          <div><div class="lab">mode</div><div class="val" style="font-size:13px;margin-top:4px;color:var(--amber)" id="hud-mode">ACOUSTIC ⚠</div></div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="label">Network controls</div>
+        <div class="modes" role="tablist">
+          <button id="mode-acoustic" class="on-acoustic" role="tab">◉ Acoustic</button>
+          <button id="mode-fiber" role="tab">▬ Fiber-optic</button>
+        </div>
+        <div class="dial">
+          <div class="dial-head"><span>Signal level</span><span class="v" id="dial-val">140 dB</span></div>
+          <input id="dial" type="range" min="80" max="250" step="1" value="140" aria-label="Signal level in decibels">
+          <div class="dial-ticks"><span>80</span><span>130</span><span>180</span><span class="planned">PLANNED 250</span></div>
+        </div>
+        <div class="presets" id="presets">
+          <button data-v="90">quiet<span class="v">90</span></button>
+          <button data-v="140">ship<span class="v">140</span></button>
+          <button data-v="180">sonar<span class="v">180</span></button>
+          <button data-v="220">network<span class="v">220</span></button>
+        </div>
+        <button id="audio-btn" class="audio-btn">▶ Enable sound</button>
+        <p class="audio-note">Audio is a loose approximation — your speakers can't safely reproduce 250 dB underwater. Real exposure would be orders of magnitude more intense.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== IMPACT ============== -->
+<section id="impact" class="section">
+  <div class="wrap">
+    <div class="chips">
+      <span class="chip chip-amber">◉ 02 / Impact</span>
+      <span class="chip">threshold model · idealised</span>
+    </div>
+    <h2>At <em id="impact-db">140 dB</em>, this is who's hurt.</h2>
+    <p class="lede">Threshold of harm varies by species and signal. Each row shows the level at which meaningful disruption begins in the published literature. The bar fills red when the current level crosses the threshold.</p>
+
+    <div class="adjust">
+      <span class="lab">Adjust level</span>
+      <input id="dial2" type="range" min="80" max="250" step="1" value="140" aria-label="Signal level in decibels">
+      <span class="val" id="dial2-val">140 dB</span>
+    </div>
+
+    <div class="species-list" id="species"></div>
+
+    <div class="tally">
+      <div class="num"><span id="tally-num">0</span>/8</div>
+      <div>
+        <div class="h">Impact class</div>
+        <div class="b">Species groups experiencing harm at the current network level. The proposed operational range is <strong>160–250 dB, continuous</strong>.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== RANGE ============== -->
+<section id="range" class="section">
+  <div class="wrap">
+    <div class="chips">
+      <span class="chip chip-cyan">◉ 03 / Range</span>
+      <span class="chip">sound doesn't stop at the source</span>
+    </div>
+    <h2>A single node reaches <em id="range-km">5.0 km</em>.<br>There will be thousands.</h2>
+    <p class="lede">Sound travels farther and faster in water than in air. Every 6 dB roughly doubles the audible range. At network scale, there is nowhere in the open ocean that is quiet.</p>
+
+    <div class="adjust">
+      <span class="lab">Adjust level</span>
+      <input id="dial3" type="range" min="80" max="250" step="1" value="140" aria-label="Signal level in decibels">
+      <span class="val" id="dial3-val">140 dB</span>
+    </div>
+
+    <div class="map">
+      <svg id="rangemap" viewBox="0 0 1400 500" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <defs>
+          <radialGradient id="rg" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="oklch(82% .18 50)" stop-opacity=".55"/>
+            <stop offset="70%" stop-color="oklch(75% .15 65)" stop-opacity=".15"/>
+            <stop offset="100%" stop-color="oklch(75% .15 65)" stop-opacity="0"/>
+          </radialGradient>
+          <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+            <path d="M 50 0 L 0 0 0 50" fill="none" stroke="oklch(30% .03 230 / .4)" stroke-width=".5"/>
+          </pattern>
+        </defs>
+        <rect width="1400" height="500" fill="url(#grid)"/>
+        <path d="M 0 80 Q 350 65 700 80 T 1400 80" fill="none" stroke="oklch(40% .04 230 / .25)" stroke-width="1" stroke-dasharray="2 6"/>
+        <path d="M 0 180 Q 350 165 700 180 T 1400 180" fill="none" stroke="oklch(40% .04 230 / .25)" stroke-width="1" stroke-dasharray="2 6"/>
+        <path d="M 0 280 Q 350 265 700 280 T 1400 280" fill="none" stroke="oklch(40% .04 230 / .25)" stroke-width="1" stroke-dasharray="2 6"/>
+        <path d="M 0 380 Q 350 365 700 380 T 1400 380" fill="none" stroke="oklch(40% .04 230 / .25)" stroke-width="1" stroke-dasharray="2 6"/>
+        <g id="rings"></g>
+        <path d="M 0 460 Q 200 440 400 455 T 800 445 T 1400 460 L 1400 500 L 0 500 Z" fill="oklch(18% .02 60)"/>
+        <g id="nodes"></g>
+        <g transform="translate(40,440)">
+          <line x1="0" y1="0" x2="300" y2="0" stroke="oklch(85% .02 220)" stroke-width="1"/>
+          <line x1="0" y1="-4" x2="0" y2="4" stroke="oklch(85% .02 220)" stroke-width="1"/>
+          <line x1="300" y1="-4" x2="300" y2="4" stroke="oklch(85% .02 220)" stroke-width="1"/>
+          <text x="150" y="-8" text-anchor="middle" fill="oklch(75% .02 230)" font-family="JetBrains Mono,monospace" font-size="10" letter-spacing="1">50 km</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="metrics">
+      <div class="metric"><div class="h">Nodes shown</div><div class="v">6</div><div class="s">of ~10,000 planned</div></div>
+      <div class="metric"><div class="h">Per-node range</div><div class="v" id="m-range">5.0 km</div><div class="s" id="m-rangedb">at 140 dB</div></div>
+      <div class="metric"><div class="h">Combined footprint</div><div class="v" id="m-foot">471 km²</div><div class="s">per snapshot</div></div>
+      <div class="metric"><div class="h">Duty cycle</div><div class="v">24/7</div><div class="s">continuous transmission</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== COMPARE ============== -->
+<section id="compare" class="section">
+  <div class="wrap">
+    <div class="chips">
+      <span class="chip chip-cyan">◉ 04 / Compare</span>
+      <span class="chip">two futures</span>
+    </div>
+    <h2>There is a quieter way to build the underwater internet.</h2>
+    <p class="lede">Fiber-optic cables already carry almost every byte of the world's internet beneath the sea. Extending the pattern — rather than replacing it with sound — would protect marine life without sacrificing the goal.</p>
+    <div class="compare-tbl" id="compare-tbl"></div>
+    <div class="compare-acc" id="compare-acc"></div>
+    <button class="compare-acc-toggle" id="compare-acc-toggle">▾ Expand all</button>
+  </div>
+</section>
+
+<!-- ============== ACT ============== -->
+<section id="act">
+  <div class="wrap" style="max-width:1100px">
+    <div class="chips">
+      <span class="chip chip-cyan">◉ 05 / Act</span>
+      <span class="chip">window closing</span>
+    </div>
+    <h2>Before the first node goes live,<br><em>the standard can still change.</em></h2>
+    <div class="steps">
+      <div class="step">
+        <div class="n">/01</div>
+        <div class="t">Speak up</div>
+        <p>Contact your national standards body (ISO / ANSI / IEC) and ask them to back a quiet, fiber-first working group.</p>
+        <a href="https://www.safesmartocean.org/" target="_blank" rel="noopener">Learn how →</a>
+      </div>
+      <div class="step">
+        <div class="n">/02</div>
+        <div class="t">Fund the science</div>
+        <p>Independent environmental impact research is what the final vote will turn on. It isn't funded by default.</p>
+        <a href="https://www.safesmartocean.org/" target="_blank" rel="noopener">Donate →</a>
+      </div>
+      <div class="step">
+        <div class="n">/03</div>
+        <div class="t">Tell the story</div>
+        <p>Most people don't know this is being decided right now. Share this page. Talk about the ocean that isn't yet loud.</p>
+        <a href="https://www.safesmartocean.org/" target="_blank" rel="noopener">Share →</a>
+      </div>
+    </div>
+    <div class="endcap">
+      <div>
+        <div class="h">End of transmission</div>
+        <div class="b">An ocean that can still be heard.</div>
+      </div>
+      <button onclick="document.getElementById('intro').scrollIntoView({behavior:'smooth',block:'start'})">↑ Start over</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Learn more · <a href="https://www.safesmartocean.org/" target="_blank" rel="noopener">safesmartocean.org</a>
+</footer>
+
+<script>
+(function(){
+'use strict';
+
+// ============================================================
+// State
+// ============================================================
+const DB_MIN=80,DB_MAX=250;
+let state={ noise:140, mode:'acoustic', audioOn:false };
+
+const SPECIES=[
+  {key:'plankton',label:'Plankton & Krill',threshold:100,effect:'Disrupted buoyancy and predator detection',depth:'Surface'},
+  {key:'crustacean',label:'Crustaceans',threshold:110,effect:'Shell damage, disrupted larval settlement',depth:'Seabed'},
+  {key:'fish',label:'Fish (schooling)',threshold:130,effect:'Schools scatter, spawning fails',depth:'Mid-water'},
+  {key:'dolphin',label:'Dolphins',threshold:150,effect:'Echolocation jammed, family groups split',depth:'Shallow'},
+  {key:'humpback',label:'Humpback whales',threshold:165,effect:'Songs drowned out, mating call range collapses',depth:'Mid-deep'},
+  {key:'blue',label:'Blue whales',threshold:180,effect:'Navigation failure, strandings, hearing loss',depth:'Deep'},
+  {key:'coral',label:'Coral reefs',threshold:200,effect:'Larval recruitment collapses near sources',depth:'Shelf'},
+  {key:'human',label:'Divers & swimmers',threshold:210,effect:'Permanent hearing damage at close range',depth:'Surface'},
+];
+const COMPARE=[
+  {label:'Signal medium',acoustic:'Sound pressure waves, 160–250 dB',fiber:'Light through glass fiber'},
+  {label:'Noise added to ocean',acoustic:'Continuous, basin-wide',fiber:'None'},
+  {label:'Bandwidth',acoustic:'Kilobits/s',fiber:'Terabits/s'},
+  {label:'Latency',acoustic:'Seconds — sound is slow',fiber:'Milliseconds'},
+  {label:'Blocked by',acoustic:'Ships, thermoclines, weather',fiber:'Physical cable breaks (repairable)'},
+  {label:'Maintenance',acoustic:'Thousands of buoys + nodes',fiber:'Trunk cables + shore stations'},
+  {label:'Marine life',acoustic:'Harmful to 8+ species classes',fiber:'Negligible impact'},
+  {label:'Already deployed',acoustic:'Prototype networks',fiber:'99% of global internet'},
+];
+const PRESETS=[90,140,180,220];
+
+function propagationKm(db){ if(db<90) return 0.1; return +(0.3*Math.pow(2,(db-100)/6)).toFixed(1); }
+function refLike(db){
+  if(db<100) return 'Rainfall on the sea surface';
+  if(db<130) return 'Cargo ship at 100 m';
+  if(db<160) return 'Commercial SONAR';
+  if(db<190) return 'Seismic airgun array';
+  if(db<220) return 'Submarine active SONAR';
+  return 'Underwater explosion';
+}
+
+// ============================================================
+// Boot
+// ============================================================
+document.getElementById('hud-date').textContent = new Date().toISOString().slice(0,10)+' · LOG';
+
+// ---------- Species rows ----------
+const speciesEl=document.getElementById('species');
+SPECIES.forEach(sp=>{
+  const row=document.createElement('div');
+  row.className='species';
+  row.dataset.key=sp.key;
+  row.innerHTML=
+    '<div><div class="name">'+sp.label+'</div><div class="depth">'+sp.depth+'</div></div>'+
+    '<div class="bar">'+
+      '<div class="bar-base" style="width:'+(((sp.threshold-DB_MIN)/(DB_MAX-DB_MIN))*100).toFixed(2)+'%"></div>'+
+      '<div class="bar-fill"></div>'+
+      '<div class="bar-tick" style="left:'+(((sp.threshold-DB_MIN)/(DB_MAX-DB_MIN))*100).toFixed(2)+'%"></div>'+
+    '</div>'+
+    '<div class="effect">'+sp.effect+'</div>'+
+    '<div class="meta"><div class="thr">≥ '+sp.threshold+' dB</div><div class="stat">◉ below threshold</div></div>';
+  speciesEl.appendChild(row);
+});
+
+// ---------- Range map nodes ----------
+const NODES=[{x:140,y:220},{x:340,y:180},{x:520,y:280},{x:760,y:200},{x:980,y:260},{x:1240,y:180}];
+const ringsG=document.getElementById('rings');
+const nodesG=document.getElementById('nodes');
+const ringEls=NODES.map(n=>{
+  const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  c.setAttribute('cx',n.x);c.setAttribute('cy',n.y);c.setAttribute('r',0);
+  c.setAttribute('fill','url(#rg)');
+  ringsG.appendChild(c);
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+  g.innerHTML=
+    '<line x1="'+n.x+'" y1="0" x2="'+n.x+'" y2="'+n.y+'" stroke="oklch(40% .02 240 / .5)" stroke-dasharray="2 3" stroke-width=".8"/>'+
+    '<circle cx="'+n.x+'" cy="'+n.y+'" r="4" fill="oklch(85% .15 60)"/>'+
+    '<circle cx="'+n.x+'" cy="'+n.y+'" r="8" fill="none" stroke="oklch(85% .15 60 / .6)" stroke-width=".6"/>';
+  nodesG.appendChild(g);
+  return c;
+});
+
+// ---------- Compare: dual-render desktop table + mobile accordion ----------
+const cmp=document.getElementById('compare-tbl');
+const cmpAcc=document.getElementById('compare-acc');
+const cmpAccToggle=document.getElementById('compare-acc-toggle');
+let cmpSel='fiber';
+
+function renderCompare(){
+  // ----- Desktop grid table -----
+  cmp.innerHTML='';
+  cmp.appendChild(Object.assign(document.createElement('div'),{className:'head-spacer'}));
+  const ah=document.createElement('button');ah.className='head acoustic'+(cmpSel==='acoustic'?' sel':'');
+  ah.innerHTML='<div class="opt">Option A</div><div class="name">Acoustic network</div>';
+  ah.onclick=()=>{cmpSel='acoustic';renderCompare();};
+  cmp.appendChild(ah);
+  const fh=document.createElement('button');fh.className='head fiber'+(cmpSel==='fiber'?' sel':'');
+  fh.innerHTML='<div class="opt">Option B</div><div class="name">Fiber-optic network</div>';
+  fh.onclick=()=>{cmpSel='fiber';renderCompare();};
+  cmp.appendChild(fh);
+  COMPARE.forEach(r=>{
+    const l=document.createElement('div');l.className='row-label';l.textContent=r.label;cmp.appendChild(l);
+    const a=document.createElement('div');a.className='cell acoustic'+(cmpSel==='acoustic'?' sel':'');a.textContent=r.acoustic;cmp.appendChild(a);
+    const f=document.createElement('div');f.className='cell fiber'+(cmpSel==='fiber'?' sel':'');f.textContent=r.fiber;cmp.appendChild(f);
+  });
+
+  // ----- Mobile accordion -----
+  // Preserve open-state across re-renders (so highlight clicks don't collapse rows)
+  const openSet=new Set([].slice.call(cmpAcc.querySelectorAll('details[open]')).map(d=>d.dataset.k));
+  cmpAcc.innerHTML='';
+  const headRow=document.createElement('div');headRow.className='head-row';
+  const ah2=document.createElement('button');ah2.className='head acoustic'+(cmpSel==='acoustic'?' sel':'');
+  ah2.innerHTML='<div class="opt">Option A</div><div class="name">Acoustic</div>';
+  ah2.onclick=()=>{cmpSel='acoustic';renderCompare();};
+  headRow.appendChild(ah2);
+  const fh2=document.createElement('button');fh2.className='head fiber'+(cmpSel==='fiber'?' sel':'');
+  fh2.innerHTML='<div class="opt">Option B</div><div class="name">Fiber-optic</div>';
+  fh2.onclick=()=>{cmpSel='fiber';renderCompare();};
+  headRow.appendChild(fh2);
+  cmpAcc.appendChild(headRow);
+
+  COMPARE.forEach(r=>{
+    const d=document.createElement('details');
+    d.className='cmp-row';d.dataset.k=r.label;
+    if(openSet.has(r.label)) d.setAttribute('open','');
+    const s=document.createElement('summary');
+    s.innerHTML='<span>'+r.label+'</span><span class="caret">▾</span>';
+    d.appendChild(s);
+    const a=document.createElement('div');a.className='cell acoustic';a.textContent=r.acoustic;d.appendChild(a);
+    const f=document.createElement('div');f.className='cell fiber';f.textContent=r.fiber;d.appendChild(f);
+    cmpAcc.appendChild(d);
+  });
+  syncAccToggleLabel();
+}
+renderCompare();
+
+// Expand-all / collapse-all
+function syncAccToggleLabel(){
+  const rows=cmpAcc.querySelectorAll('details.cmp-row');
+  const allOpen=rows.length>0 && [].every.call(rows,d=>d.hasAttribute('open'));
+  cmpAccToggle.textContent=allOpen?'▴ Collapse all':'▾ Expand all';
+}
+cmpAccToggle.addEventListener('click',()=>{
+  const rows=cmpAcc.querySelectorAll('details.cmp-row');
+  const allOpen=[].every.call(rows,d=>d.hasAttribute('open'));
+  rows.forEach(d=>{ if(allOpen) d.removeAttribute('open'); else d.setAttribute('open',''); });
+  syncAccToggleLabel();
+});
+// Keep toggle label in sync as user opens/closes individual rows
+cmpAcc.addEventListener('toggle',e=>{ if(e.target.matches('details.cmp-row')) syncAccToggleLabel(); },true);
+
+// ============================================================
+// Update UI from state
+// ============================================================
+const dial=document.getElementById('dial');
+const dial2=document.getElementById('dial2');
+const dial3=document.getElementById('dial3');
+const dialVal=document.getElementById('dial-val');
+const dial2Val=document.getElementById('dial2-val');
+const dial3Val=document.getElementById('dial3-val');
+const hudDb=document.getElementById('hud-db');
+const hudRange=document.getElementById('hud-range');
+const hudLike=document.getElementById('hud-like');
+const hudMode=document.getElementById('hud-mode');
+const impactDb=document.getElementById('impact-db');
+const tallyNum=document.getElementById('tally-num');
+const rangeKm=document.getElementById('range-km');
+const mRange=document.getElementById('m-range');
+const mFoot=document.getElementById('m-foot');
+const mRangeDb=document.getElementById('m-rangedb');
+const speciesRows=[].slice.call(document.querySelectorAll('.species'));
+const presetBtns=[].slice.call(document.querySelectorAll('#presets button'));
+const modeAcoustic=document.getElementById('mode-acoustic');
+const modeFiber=document.getElementById('mode-fiber');
+
+function update(){
+  const n=state.noise;
+  const km=propagationKm(n);
+  dial.value=n; dial2.value=n; dial3.value=n;
+  dialVal.textContent=Math.round(n)+' dB';
+  dial2Val.textContent=Math.round(n)+' dB';
+  dial3Val.textContent=Math.round(n)+' dB';
+  hudDb.innerHTML=Math.round(n)+'<span class="small"> dB re 1μPa</span>';
+  hudDb.className='val'+(n>170?' warn':'');
+  hudRange.innerHTML=km+'<span class="small"> km</span>';
+  hudLike.textContent=refLike(n);
+  hudMode.textContent=state.mode==='fiber'?'FIBER-OPTIC ✓':'ACOUSTIC ⚠';
+  hudMode.style.color=state.mode==='fiber'?'var(--cyan)':'var(--amber)';
+  impactDb.textContent=Math.round(n)+' dB';
+  impactDb.style.color=n>150?'var(--amber)':'var(--cyan)';
+  rangeKm.textContent=km+' km';
+  mRange.textContent=km+' km';
+  mFoot.textContent=Math.round(km*km*Math.PI*6).toLocaleString()+' km²';
+  mRangeDb.textContent='at '+Math.round(n)+' dB';
+
+  // species
+  let affected=0;
+  speciesRows.forEach((row,i)=>{
+    const sp=SPECIES[i];
+    const isAff=n>=sp.threshold;
+    if(isAff) affected++;
+    row.classList.toggle('affected',isAff);
+    const fill=row.querySelector('.bar-fill');
+    fill.style.width=(((n-DB_MIN)/(DB_MAX-DB_MIN))*100).toFixed(2)+'%';
+    row.querySelector('.stat').textContent=isAff?'⚠ affected':'◉ below threshold';
+  });
+  tallyNum.textContent=affected;
+
+  // ranges in svg
+  const rPx=km*6;
+  ringEls.forEach(c=>c.setAttribute('r',rPx));
+
+  // mode + dial enabled
+  dial.disabled=state.mode==='fiber';
+  presetBtns.forEach(b=>{
+    const v=+b.dataset.v;
+    b.classList.toggle('active',Math.abs(n-v)<3 && state.mode==='acoustic');
+  });
+  modeAcoustic.classList.toggle('on-acoustic',state.mode==='acoustic');
+  modeFiber.classList.toggle('on-fiber',state.mode==='fiber');
+}
+update();
+
+// ============================================================
+// Listeners
+// ============================================================
+function setNoise(v){ state.noise=Math.max(DB_MIN,Math.min(DB_MAX,v)); update(); }
+function setMode(m){ state.mode=m; if(m==='fiber'&&state.audioOn) toggleAudio(false); update(); }
+dial.addEventListener('input',e=>setNoise(+e.target.value));
+dial2.addEventListener('input',e=>setNoise(+e.target.value));
+dial3.addEventListener('input',e=>setNoise(+e.target.value));
+modeAcoustic.addEventListener('click',()=>setMode('acoustic'));
+modeFiber.addEventListener('click',()=>setMode('fiber'));
+presetBtns.forEach(b=>b.addEventListener('click',()=>{ setMode('acoustic'); setNoise(+b.dataset.v); }));
+
+// ============================================================
+// Audio (gated by user gesture; iOS Safari friendly)
+// ============================================================
+let audioCtx=null,noiseSrc=null,osc=null,gain=null;
+function startAudio(){
+  try{
+    audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state==='suspended') audioCtx.resume();
+    // pink-ish noise via filtered white noise
+    const buf=audioCtx.createBuffer(1,audioCtx.sampleRate*2,audioCtx.sampleRate);
+    const d=buf.getChannelData(0);
+    let b0=0,b1=0,b2=0;
+    for(let i=0;i<d.length;i++){
+      const w=Math.random()*2-1;
+      b0=0.99765*b0+w*0.099046;
+      b1=0.96300*b1+w*0.2965164;
+      b2=0.57000*b2+w*1.0526913;
+      d[i]=(b0+b1+b2+w*0.1848)*0.1;
+    }
+    noiseSrc=audioCtx.createBufferSource();
+    noiseSrc.buffer=buf;noiseSrc.loop=true;
+    osc=audioCtx.createOscillator();
+    osc.type='sine';osc.frequency.value=110;
+    gain=audioCtx.createGain();
+    gain.gain.value=0;
+    const lp=audioCtx.createBiquadFilter();
+    lp.type='lowpass';lp.frequency.value=900;
+    noiseSrc.connect(lp);lp.connect(gain);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    noiseSrc.start();osc.start();
+  }catch(e){ console.warn('audio failed',e); state.audioOn=false; }
+}
+function stopAudio(){
+  try{
+    if(noiseSrc){noiseSrc.stop();noiseSrc.disconnect();noiseSrc=null;}
+    if(osc){osc.stop();osc.disconnect();osc=null;}
+    if(gain){gain.disconnect();gain=null;}
+    if(audioCtx){audioCtx.close();audioCtx=null;}
+  }catch(e){}
+}
+function tickAudio(){
+  if(!state.audioOn||!gain) return;
+  // map dB 80..250 → loudness 0..0.4 (cap below painful)
+  const t=(state.noise-80)/170;
+  gain.gain.setTargetAtTime(state.mode==='fiber'?0:Math.pow(t,1.6)*0.35, audioCtx.currentTime, 0.08);
+  // sub-bass throb increases with dB
+  if(osc) osc.frequency.setTargetAtTime(80+t*130, audioCtx.currentTime, 0.1);
+}
+setInterval(tickAudio,100);
+function toggleAudio(force){
+  const want=typeof force==='boolean'?force:!state.audioOn;
+  if(want&&state.mode==='fiber') return; // no audio in fiber
+  if(want){ startAudio(); state.audioOn=true; }
+  else { stopAudio(); state.audioOn=false; }
+  const btn=document.getElementById('audio-btn');
+  btn.classList.toggle('on',state.audioOn);
+  btn.textContent=state.audioOn?'◉ Sound on · tap to mute':'▶ Enable sound';
+}
+document.getElementById('audio-btn').addEventListener('click',()=>toggleAudio());
+
+// ============================================================
+// Ocean canvas (lean: 5 nodes, sound rings, simple creatures)
+// ============================================================
+const cvs=document.getElementById('ocean');
+const ctx=cvs.getContext('2d',{alpha:false});
+const reduceMotion=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+const SOURCES=[{x:.18,y:.42},{x:.37,y:.56},{x:.55,y:.38},{x:.72,y:.5},{x:.88,y:.44}];
+let pop=[];
+function rngFactory(seed){let s=seed;return()=>{s=(s*9301+49297)%233280;return s/233280;};}
+function genPop(){
+  const r=rngFactory(42);pop=[];
+  // simplified: 2 whales, 5 dolphins (1 pod), 8 fish, 30 krill
+  for(let i=0;i<2;i++)pop.push({type:'whale',x:r(),y:.6+r()*.25,dir:r()>.5?1:-1,phase:r()*Math.PI*2,speed:.012+r()*.008});
+  const px=r(),py=.28+r()*.15;
+  for(let i=0;i<5;i++)pop.push({type:'dolphin',x:px+(r()-.5)*.08,y:py+(r()-.5)*.05,dir:r()>.5?1:-1,phase:r()*Math.PI*2,speed:.04+r()*.02});
+  for(let i=0;i<8;i++)pop.push({type:'fish',x:r(),y:.35+r()*.35,dir:r()>.5?1:-1,phase:r()*Math.PI*2,speed:.04+r()*.025});
+  for(let i=0;i<30;i++)pop.push({type:'krill',x:r(),y:.2+r()*.6,dir:r()>.5?1:-1,phase:r()*Math.PI*2,speed:.06+r()*.04});
+}
+genPop();
+const TPL={
+  whale:{w:140,h:42,c:'oklch(55% .02 240)',sens:1},
+  dolphin:{w:60,h:18,c:'oklch(65% .02 230)',sens:.9},
+  fish:{w:32,h:12,c:'oklch(60% .03 220)',sens:.5},
+  krill:{w:5,h:2.5,c:'oklch(70% .04 200)',sens:.2},
+};
+
+let W=0,H=0,DPR=Math.min(window.devicePixelRatio||1,2);
+function resize(){
+  const r=cvs.getBoundingClientRect();
+  W=r.width;H=r.height;
+  cvs.width=W*DPR;cvs.height=H*DPR;
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+}
+const ro=new ResizeObserver(resize);ro.observe(cvs);
+
+let waves=[];
+let lastEmit=0;
+let raf=0,running=false;
+let lastT=performance.now();
+
+function draw(t){
+  if(!running) return;
+  const dt=Math.min(48,t-lastT); lastT=t;
+  const stress=Math.min(1,Math.max(0,(state.noise-80)/170));
+
+  // bg
+  const g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'oklch(28% .06 220)');
+  g.addColorStop(.35,'oklch(18% .05 235)');
+  g.addColorStop(1,'oklch(6% .03 255)');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+
+  // god rays — light
+  ctx.save();ctx.globalCompositeOperation='screen';
+  for(let i=0;i<3;i++){
+    const rx=((i*.31+t*.00003)%1)*W;
+    const grad=ctx.createLinearGradient(rx,0,rx+50,H*.7);
+    grad.addColorStop(0,'oklch(85% .08 220 / .07)');
+    grad.addColorStop(1,'oklch(85% .08 220 / 0)');
+    ctx.fillStyle=grad;ctx.beginPath();
+    ctx.moveTo(rx,0);ctx.lineTo(rx+60,0);
+    ctx.lineTo(rx+160,H*.7);ctx.lineTo(rx+100,H*.7);ctx.closePath();ctx.fill();
+  }
+  ctx.restore();
+
+  // seabed
+  ctx.fillStyle='oklch(22% .02 60)';
+  ctx.beginPath();ctx.moveTo(0,H);
+  for(let x=0;x<=W;x+=24){
+    const y=H-12-Math.sin(x*.012+t*.0002)*3;
+    ctx.lineTo(x,y);
+  }
+  ctx.lineTo(W,H);ctx.closePath();ctx.fill();
+
+  // emit + draw rings (only when acoustic)
+  if(state.mode==='acoustic'){
+    const interval=Math.max(140, 800-stress*620);
+    if(t-lastEmit>interval){
+      lastEmit=t;
+      SOURCES.forEach(s=>waves.push({x:s.x*W,y:s.y*H,r:6,life:0,intensity:.2+stress*.8}));
+    }
+    waves=waves.filter(w=>{
+      w.r+=dt*(.15+stress*.25);
+      w.life+=dt;
+      const alpha=Math.max(0,(1-w.life/2200))*w.intensity;
+      if(alpha<=.01) return false;
+      ctx.beginPath();
+      ctx.arc(w.x,w.y,w.r,0,Math.PI*2);
+      const hue=stress>.6?50:200;
+      ctx.strokeStyle='oklch(78% .15 '+hue+' / '+alpha.toFixed(3)+')';
+      ctx.lineWidth=1.2;
+      ctx.stroke();
+      return true;
+    });
+    // node dots
+    SOURCES.forEach(s=>{
+      ctx.beginPath();
+      ctx.arc(s.x*W,s.y*H,3,0,Math.PI*2);
+      ctx.fillStyle='oklch(85% .15 60)';ctx.fill();
+    });
+  } else {
+    waves.length=0;
+    // fiber: thin horizontal cable line
+    ctx.strokeStyle='oklch(85% .12 200 / .35)';
+    ctx.lineWidth=1.5;
+    ctx.setLineDash([4,4]);
+    ctx.beginPath();ctx.moveTo(0,H*.92);ctx.lineTo(W,H*.92);ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // creatures
+  pop.forEach(c=>{
+    const tmpl=TPL[c.type];
+    const cs=Math.min(1,stress*tmpl.sens);
+    const wob=cs*Math.sin(t*.008+c.phase*3)*14;
+    const drift=cs*Math.cos(t*.005+c.phase)*10;
+    const x=c.x*W+drift;
+    const y=c.y*H+wob;
+    const bob=Math.sin(t*.002+c.phase)*2;
+    const w=tmpl.w,h=tmpl.h;
+    ctx.save();
+    ctx.translate(x,y+bob);
+    ctx.scale(c.dir,1);
+    ctx.globalAlpha=.85-cs*.1;
+    ctx.fillStyle=cs>.5?('oklch('+(50+cs*10)+'% '+(.08+cs*.08)+' '+(65-cs*10)+')'):tmpl.c;
+    ctx.beginPath();ctx.ellipse(0,0,w/2,h/2,0,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(-w/2,0);
+    ctx.lineTo(-w/2-h*.6,-h*.55);
+    ctx.lineTo(-w/2-h*.6,h*.55);
+    ctx.closePath();ctx.fill();
+    if(tmpl.w>30){
+      ctx.fillStyle='oklch(95% .02 80 / '+(.4+cs*.6)+')';
+      ctx.beginPath();ctx.arc(w*.3,-h*.15,Math.max(1,h*.06),0,Math.PI*2);ctx.fill();
+    }
+    ctx.restore();
+    c.x+=c.dir*c.speed*(1+cs*2)*.003;
+    if(c.x>1.1)c.x=-.1; if(c.x<-.1)c.x=1.1;
+  });
+
+  raf=requestAnimationFrame(draw);
+}
+
+function startCanvas(){
+  if(running||reduceMotion) return;
+  running=true; lastT=performance.now();
+  raf=requestAnimationFrame(draw);
+}
+function stopCanvas(){ running=false; cancelAnimationFrame(raf); }
+
+// reduced-motion: render a single frame
+if(reduceMotion){
+  resize(); running=true; draw(0); running=false;
+}
+
+// pause when off-screen / tab hidden
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting && !document.hidden) startCanvas();
+    else stopCanvas();
+  });
+},{threshold:0.05});
+io.observe(cvs);
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden) stopCanvas();
+  else if(cvs.getBoundingClientRect().top<window.innerHeight && cvs.getBoundingClientRect().bottom>0) startCanvas();
+});
+
+// ============================================================
+// Side rail / bottom rail active state
+// ============================================================
+const stops=['intro','listen','impact','range','compare','act'];
+const railLinks=document.querySelectorAll('[data-stop]');
+const obs=new IntersectionObserver(entries=>{
+  const v=entries.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];
+  if(!v) return;
+  const id=v.target.id;
+  railLinks.forEach(a=>a.classList.toggle('active',a.dataset.stop===id));
+},{threshold:[0.2,0.5,0.8]});
+stops.forEach(id=>{const el=document.getElementById(id);if(el)obs.observe(el);});
+
+})();
+</script>
+</body>
+</html>

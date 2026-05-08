@@ -42,10 +42,21 @@ a{color:var(--cyan);text-decoration:none}
 input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;width:100%}
 input[type=range]::-webkit-slider-runnable-track{height:4px;background:rgba(255,255,255,.1);border-radius:2px}
 input[type=range]::-moz-range-track{height:4px;background:rgba(255,255,255,.1);border-radius:2px}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--cyan);margin-top:-7px;border:0;box-shadow:0 0 12px oklch(85% .12 200 / .5)}
-input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--cyan);border:0}
-input[type=range]:disabled::-webkit-slider-thumb{background:var(--ink-4)}
-input[type=range]:disabled::-moz-range-thumb{background:var(--ink-4)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--cyan);margin-top:-8px;border:0;box-shadow:0 0 12px oklch(85% .12 200 / .5);transition:transform .15s}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--cyan);border:0;box-shadow:0 0 12px oklch(85% .12 200 / .5)}
+input[type=range]:disabled::-webkit-slider-thumb{background:var(--ink-4);box-shadow:none}
+input[type=range]:disabled::-moz-range-thumb{background:var(--ink-4);box-shadow:none}
+/* Drag-affordance: subtle pulse until first interaction */
+@keyframes slider-pulse{
+  0%,100%{box-shadow:0 0 10px oklch(85% .12 200 / .45);transform:scale(1)}
+  50%{box-shadow:0 0 22px oklch(85% .12 200 / .9),0 0 4px oklch(88% .12 200);transform:scale(1.08)}
+}
+input[type=range]:not(.touched):not(:disabled)::-webkit-slider-thumb{animation:slider-pulse 1.6s ease-in-out infinite}
+input[type=range]:not(.touched):not(:disabled)::-moz-range-thumb{animation:slider-pulse 1.6s ease-in-out infinite}
+@media(prefers-reduced-motion:reduce){
+  input[type=range]::-webkit-slider-thumb{animation:none!important}
+  input[type=range]::-moz-range-thumb{animation:none!important}
+}
 
 /* ---------- Header ---------- */
 header{
@@ -411,6 +422,122 @@ footer{
 }
 footer a{color:var(--ink-3)}
 
+/* ---------- Learn-more disclosure drawers ---------- */
+.learn-more{
+  margin-top:36px;border:1px solid var(--line);
+  background:oklch(8% .02 250 / .5);
+}
+.learn-more + .learn-more{margin-top:10px}
+.learn-more > summary{
+  list-style:none;cursor:pointer;
+  padding:16px 20px;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--cyan-d);
+  -webkit-tap-highlight-color:transparent;
+}
+.learn-more > summary::-webkit-details-marker{display:none}
+.learn-more > summary:hover{background:oklch(10% .03 250 / .6)}
+.learn-more > summary .caret{
+  display:inline-block;transition:transform .25s;
+  font-family:var(--mono);font-size:14px;color:var(--cyan);flex:0 0 auto;
+}
+.learn-more[open] > summary{
+  border-bottom:1px solid var(--line-2);
+  background:oklch(10% .03 250 / .6);
+}
+.learn-more[open] > summary .caret{transform:rotate(180deg)}
+.learn-more .body{padding:22px 22px 26px}
+.learn-more .body h3{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(22px,4.6vw,30px);line-height:1.15;
+  letter-spacing:-.01em;color:var(--ink);margin-bottom:14px;
+}
+.learn-more .body p{
+  font-family:var(--sans);font-size:14.5px;line-height:1.62;
+  color:var(--ink-2);margin-bottom:13px;
+}
+.learn-more .body p:last-child{margin-bottom:0}
+.learn-more .body strong{color:var(--ink);font-weight:500}
+.learn-more .body em{color:var(--cyan-d);font-style:italic}
+@media(max-width:520px){
+  .learn-more > summary{padding:14px 16px;font-size:10.5px}
+  .learn-more .body{padding:18px 18px 22px}
+  .learn-more .body p{font-size:14px}
+}
+
+/* Healthy-ocean coda */
+.healthy-ocean{
+  max-width:760px;margin:80px auto 0;
+  padding:40px 28px;text-align:center;
+  border:1px solid oklch(85% .12 200 / .25);
+  background:radial-gradient(ellipse at 50% 0%,oklch(20% .08 220 / .5) 0%,oklch(10% .04 235 / .3) 100%);
+  border-radius:2px;
+}
+.healthy-ocean .h{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--cyan);margin-bottom:14px;
+}
+.healthy-ocean .lead{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(26px,5.5vw,40px);line-height:1.1;
+  letter-spacing:-.01em;color:var(--ink);margin-bottom:12px;
+}
+.healthy-ocean .sub{
+  font-family:var(--sans);font-size:14.5px;line-height:1.55;
+  color:var(--ink-2);max-width:520px;margin:0 auto 24px;
+}
+.healthy-ocean button{
+  padding:14px 26px;
+  background:oklch(85% .12 200 / .12);
+  border:1px solid oklch(85% .12 200 / .5);color:var(--cyan-d);
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;
+  transition:all .2s;cursor:pointer;border-radius:2px;
+}
+.healthy-ocean button:hover{background:oklch(85% .12 200 / .22);border-color:var(--cyan)}
+.healthy-ocean button.on{
+  background:var(--cyan);color:oklch(12% .03 255);
+  box-shadow:0 0 30px oklch(85% .12 200 / .4);
+}
+.healthy-ocean .indicator{
+  display:none;height:32px;margin:18px auto 0;
+  align-items:center;justify-content:center;gap:4px;
+}
+.healthy-ocean.playing .indicator{display:flex}
+.healthy-ocean .indicator span{
+  display:inline-block;width:3px;background:var(--cyan);
+  animation:healthy-wave 1.4s ease-in-out infinite;border-radius:2px;
+}
+.healthy-ocean .indicator span:nth-child(1){animation-delay:0s}
+.healthy-ocean .indicator span:nth-child(2){animation-delay:.15s}
+.healthy-ocean .indicator span:nth-child(3){animation-delay:.3s}
+.healthy-ocean .indicator span:nth-child(4){animation-delay:.45s}
+.healthy-ocean .indicator span:nth-child(5){animation-delay:.6s}
+.healthy-ocean .indicator span:nth-child(6){animation-delay:.75s}
+.healthy-ocean .indicator span:nth-child(7){animation-delay:.9s}
+@keyframes healthy-wave{0%,100%{height:6px;opacity:.55}50%{height:28px;opacity:1}}
+.healthy-ocean .footnote{
+  margin-top:18px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-4);
+}
+@media(prefers-reduced-motion:reduce){
+  .healthy-ocean .indicator span{animation:none;height:14px}
+}
+
+/* Act framing block above the funding drawers */
+.act-framing{
+  margin-top:60px;padding-top:30px;border-top:1px solid var(--line);
+}
+.act-framing .title{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(26px,5.5vw,40px);line-height:1.15;letter-spacing:-.015em;
+  color:var(--ink);
+}
+.act-framing .tag{
+  margin-top:10px;font-family:var(--sans);font-size:15px;line-height:1.55;
+  color:var(--ink-2);max-width:680px;
+}
+
 /* ---------- Reduced motion ---------- */
 @media(prefers-reduced-motion:reduce){
   *{transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}
@@ -461,6 +588,18 @@ footer a{color:var(--ink-3)}
     </p>
     <p>This is what that means — for the whales, the reefs, the fish, and eventually us. Scroll, drag, listen.</p>
     <button class="descend" onclick="document.getElementById('listen').scrollIntoView({behavior:'smooth',block:'start'})">Descend ↓</button>
+
+    <details class="learn-more" style="max-width:780px">
+      <summary><span>Why this matters →</span><span class="caret">▾</span></summary>
+      <div class="body">
+        <h3>The Moment</h3>
+        <p>International standards bodies — ISO and IEC — are in the final stages of approving technical specifications for an "Underwater Internet of Things": a global network of acoustic sensors and modems that would communicate continuously through the ocean using sound waves at 160 to 250 decibels, around the clock, indefinitely.</p>
+        <p>Sound is not an ambient background in the ocean. It is the medium through which life perceives, navigates, and organizes itself — from the largest whale to the smallest coral polyp. For whales, dolphins, and porpoises, whose hearing ranges overlap precisely with the proposed signal frequencies, sound is the primary channel through which they build internal models of their environment, maintain social bonds across ocean basins, navigate, forage, and care for their young. A system broadcasting continuous broadband interference at these levels would not introduce noise into a quiet habitat. It would structurally dismantle the perceptual world that marine life has organized itself around for hundreds of millions of years — and close the ocean, as a place of genuine encounter, to humans as well.</p>
+        <p>A safer alternative exists: a fiber-optic and bio-friendly multi-modal architecture that delivers the same functional capability without saturating the ocean with constant high-intensity sound. The question is not whether this technology will exist. It is what principles will govern how it is built.</p>
+        <p><em>The standards have not yet been ratified. The window for shaping them — or stopping them — is open. But it is closing.</em></p>
+      </div>
+    </details>
+
     <div class="footnote">
       <span>◉ Record · 47.3°N 8.2°W</span>
       <span>Depth 0 m</span>
@@ -478,7 +617,8 @@ footer a{color:var(--ink-3)}
       <span class="chip">north atlantic</span>
     </div>
     <h2>Turn the dial. Meet the network as a whale would.</h2>
-    <p class="lede">Five acoustic nodes. Each pulses data through the water as pressure waves. Drag the decibel dial to hear and see what changes as the network scales up to its planned operational range.</p>
+    <p class="lede">Each pulses data through the water as pressure waves. Drag the decibel dial to hear and see what changes as the network scales up to its planned operational range.</p>
+    <p class="lede" style="margin-top:10px;color:var(--ink-3);font-size:14.5px">Audio is a loose approximation — your speakers can't safely reproduce 250 dB underwater. Real exposure would be orders of magnitude more intense.</p>
 
     <div class="grid">
       <div class="viewport">
@@ -513,7 +653,6 @@ footer a{color:var(--ink-3)}
           <button data-v="220">network<span class="v">220</span></button>
         </div>
         <button id="audio-btn" class="audio-btn">▶ Enable sound</button>
-        <p class="audio-note">Audio is a loose approximation — your speakers can't safely reproduce 250 dB underwater. Real exposure would be orders of magnitude more intense.</p>
       </div>
     </div>
   </div>
@@ -613,6 +752,16 @@ footer a{color:var(--ink-3)}
     <div class="compare-tbl" id="compare-tbl"></div>
     <div class="compare-acc" id="compare-acc"></div>
     <button class="compare-acc-toggle" id="compare-acc-toggle">▾ Expand all</button>
+
+    <details class="learn-more">
+      <summary><span>The team behind QOSI →</span><span class="caret">▾</span></summary>
+      <div class="body">
+        <h3>The Initiative</h3>
+        <p>The <strong>Quiet Ocean Standards Initiative (QOSI)</strong>, operating under the U.S. 501(c)(3) Safe Smart Oceans, is the only organized effort working from inside the international standards process to ensure the underwater network adopted is one the ocean can live with.</p>
+        <p>QOSI's founder and director, <strong>Dr. Kathy Matara</strong>, holds the position of Convener of Working Group 7 (WG7) under ISO/IEC SC41 — the working group actively writing the technical standards. There is no comparable voice for ocean life anywhere else in that process. She is supported by <strong>Dr. Patrick J.O. Miller</strong> of the University of St Andrews, one of the world's most published researchers on the effects of underwater sound on cetaceans; <strong>Dr. Timothy Schoechle</strong>, an internationally recognized standards expert uniquely able to translate the scientific case into the technical language committee members will engage with; and a research team currently waiting for funding to begin formal counter-proposal work.</p>
+        <p>QOSI formally represents the United States, Scotland, and Canada on the international planning committees. <em>This is not advocacy conducted from the outside. It is science and conscience working from within the process itself, at the moment when it still matters.</em></p>
+      </div>
+    </details>
   </div>
 </section>
 
@@ -635,15 +784,49 @@ footer a{color:var(--ink-3)}
         <div class="n">/02</div>
         <div class="t">Fund the science</div>
         <p>Independent environmental impact research is what the final vote will turn on. It isn't funded by default.</p>
-        <a href="https://www.safesmartocean.org/" target="_blank" rel="noopener">Donate →</a>
+        <a href="https://www.safesmartocean.org/donate" target="_blank" rel="noopener">Donate →</a>
       </div>
       <div class="step">
         <div class="n">/03</div>
         <div class="t">Tell the story</div>
         <p>Most people don't know this is being decided right now. Share this page. Talk about the ocean that isn't yet loud.</p>
-        <a href="https://www.safesmartocean.org/" target="_blank" rel="noopener">Share →</a>
+        <a href="https://instagram.com/safesmartocean" target="_blank" rel="noopener">Share →</a>
       </div>
     </div>
+    <div class="act-framing">
+      <div class="title">The ocean still speaks. Here is how we keep it that way.</div>
+      <p class="tag">A funding and partnership opportunity to shape the international standards for the world's first underwater internet — before it becomes irreversible.</p>
+    </div>
+
+    <details class="learn-more">
+      <summary><span>The funding ask →</span><span class="caret">▾</span></summary>
+      <div class="body">
+        <h3>The Opportunity</h3>
+        <p>QOSI is raising <strong>$5 million</strong> to fully fund the technical development, scientific documentation, counter-proposal preparation, and advocacy necessary to ensure a bio-friendly architecture becomes the adopted standard. The ocean whose future this work is protecting produces half of Earth's atmospheric oxygen, sustains a substantial portion of the planet's climate stability, and is home to some of the most sophisticated minds in the living world. The cost of getting this standard wrong will be measured in centuries.</p>
+        <p>Use of funds includes technical research and counter-proposal development; compensation for scientists and engineers currently working without pay; travel and sustained engagement at the standards meetings where decisions are made through relationship; formal environmental impact analysis and bio-friendly architecture specifications; strategic immersion experiences — including potential in-water encounters with cetaceans in Mo'orea — ensuring the people whose votes will determine this standard have met, in the water, the animals their decisions will affect; as well as ongoing public communications and coalition-building.</p>
+        <p>The highest-leverage near-term opportunity is a time-bound request for the upcoming <strong>Paris technical workshop</strong>. <em>$50K is needed to get the team to Paris in June to submit the proposal for bio-friendly standards.</em></p>
+      </div>
+    </details>
+
+    <details class="learn-more">
+      <summary><span>Strategic partnerships →</span><span class="caret">▾</span></summary>
+      <div class="body">
+        <h3>Beyond Funding: Strategic Partnership</h3>
+        <p>QOSI is equally interested in partnerships with organizations whose expertise, networks, or platforms can advance the work. Partnerships of particular value include scientific institutions and research collaborations, conservation organizations with standards-body engagement experience, cultural and Indigenous-led initiatives including alignment with the He Whakaputanga Moana movement, communications and media partners, legal and policy expertise in rights-of-nature frameworks and international environmental governance, and in-kind support across technical, legal, and communications capacities.</p>
+        <p><em>We welcome introductions. Many of the most significant moves in ocean conservation have begun with one trusted person sharing the right document with the right peer at the right moment.</em></p>
+      </div>
+    </details>
+
+    <details class="learn-more">
+      <summary><span>Why this matters now →</span><span class="caret">▾</span></summary>
+      <div class="body">
+        <h3>Why This Matters Now</h3>
+        <p>Once standards are ratified, they shape global technology deployment for decades. The cost of changing the path before ratification is a fraction of the cost of remediation afterward — and remediation may not be possible once the infrastructure is in place.</p>
+        <p>At the same time, a historic alignment is building. The <strong>He Whakaputanga Moana</strong> declaration, signed in March 2024 by Indigenous leaders of New Zealand, Tahiti, Tonga, the Cook Islands, Hawaiʻi, and Rapanui, recognizes whales as legal persons with an inherent right to a healthy acoustic environment. The proposed UIoT, as currently specified, would violate that right at planetary scale.</p>
+        <p>The scientific community producing the most advanced cetacean communication research — Project CETI, the Earth Species Project, the University of St Andrews — is in direct alignment with this declaration. <em>The scientific case, the ethical case, and the strategic case converge on the same conclusion: this is the moment to act.</em></p>
+      </div>
+    </details>
+
     <div class="endcap">
       <div>
         <div class="h">End of transmission</div>
@@ -652,6 +835,17 @@ footer a{color:var(--ink-3)}
       <button onclick="document.getElementById('intro').scrollIntoView({behavior:'smooth',block:'start'})">↑ Start over</button>
     </div>
   </div>
+</section>
+
+<section class="healthy-ocean" id="healthy-ocean">
+  <div class="h">◉ Coda</div>
+  <div class="lead">Hear how it should sound.</div>
+  <p class="sub">An ocean alive — whales calling across deep water, swells rolling, distant bubbles, the small clicks of dolphins. The soundscape we still have, for now.</p>
+  <button id="healthy-btn">▶ Listen to a healthy ocean</button>
+  <div class="indicator" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="footnote">Best with headphones · gentle volume</div>
 </section>
 
 <footer>
@@ -887,9 +1081,10 @@ update();
 // ============================================================
 function setNoise(v){ state.noise=Math.max(DB_MIN,Math.min(DB_MAX,v)); update(); }
 function setMode(m){ state.mode=m; if(m==='fiber'&&state.audioOn) toggleAudio(false); update(); }
-dial.addEventListener('input',e=>setNoise(+e.target.value));
-dial2.addEventListener('input',e=>setNoise(+e.target.value));
-dial3.addEventListener('input',e=>setNoise(+e.target.value));
+function markSlidersTouched(){[dial,dial2,dial3].forEach(d=>d.classList.add('touched'));}
+dial.addEventListener('input',e=>{markSlidersTouched();setNoise(+e.target.value);});
+dial2.addEventListener('input',e=>{markSlidersTouched();setNoise(+e.target.value);});
+dial3.addEventListener('input',e=>{markSlidersTouched();setNoise(+e.target.value);});
 modeAcoustic.addEventListener('click',()=>setMode('acoustic'));
 modeFiber.addEventListener('click',()=>setMode('fiber'));
 presetBtns.forEach(b=>b.addEventListener('click',()=>{ setMode('acoustic'); setNoise(+b.dataset.v); }));
@@ -956,6 +1151,179 @@ function toggleAudio(force){
 document.getElementById('audio-btn').addEventListener('click',()=>toggleAudio());
 
 // ============================================================
+// Healthy ocean — procedural soundscape (whales, waves, bubbles, clicks)
+// ============================================================
+let healthyCtx=null,healthyMaster=null,healthyTimers=[],healthyOn=false;
+const healthyEl=document.getElementById('healthy-ocean');
+const healthyBtn=document.getElementById('healthy-btn');
+
+function startHealthyAudio(){
+  // Stop sonar audio if it's running — they'd compete
+  if(state.audioOn) toggleAudio(false);
+  try{
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    if(ctx.state==='suspended') ctx.resume();
+    const master=ctx.createGain();
+    master.gain.value=0;
+    master.connect(ctx.destination);
+    master.gain.setTargetAtTime(0.55, ctx.currentTime, 1.2);
+
+    // 1) Wave swells — pink-ish noise, low-passed, slow LFO on gain
+    const len=ctx.sampleRate*4;
+    const buf=ctx.createBuffer(1,len,ctx.sampleRate);
+    const dd=buf.getChannelData(0);
+    let b0=0,b1=0,b2=0;
+    for(let i=0;i<len;i++){
+      const w=Math.random()*2-1;
+      b0=0.99765*b0+w*0.099046;
+      b1=0.96300*b1+w*0.2965164;
+      b2=0.57000*b2+w*1.0526913;
+      dd[i]=(b0+b1+b2+w*0.1848)*0.07;
+    }
+    const noiseSrc=ctx.createBufferSource();
+    noiseSrc.buffer=buf;noiseSrc.loop=true;
+    const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=520;lp.Q.value=.5;
+    const wavesG=ctx.createGain();wavesG.gain.value=.6;
+    // LFO modulating wave gain to mimic swells
+    const lfo=ctx.createOscillator();lfo.frequency.value=.13;
+    const lfoG=ctx.createGain();lfoG.gain.value=.32;
+    lfo.connect(lfoG);lfoG.connect(wavesG.gain);lfo.start();
+    noiseSrc.connect(lp);lp.connect(wavesG);wavesG.connect(master);
+    noiseSrc.start();
+
+    // 2) Deep ambient rumble (the ocean's own breath)
+    const rumble=ctx.createOscillator();rumble.type='sine';rumble.frequency.value=38;
+    const rumbleG=ctx.createGain();rumbleG.gain.value=.07;
+    const rumbleLFO=ctx.createOscillator();rumbleLFO.frequency.value=.08;
+    const rumbleLFOG=ctx.createGain();rumbleLFOG.gain.value=.03;
+    rumbleLFO.connect(rumbleLFOG);rumbleLFOG.connect(rumbleG.gain);rumbleLFO.start();
+    rumble.connect(rumbleG);rumbleG.connect(master);rumble.start();
+
+    // 3) Whale calls — periodic frequency-swept tones with a touch of harmonic
+    function scheduleWhale(){
+      if(!healthyOn) return;
+      const now=ctx.currentTime;
+      const baseFreq=140+Math.random()*180;       // 140–320 Hz
+      const endFreq=baseFreq*(0.55+Math.random()*0.25);
+      const dur=3.5+Math.random()*4.5;
+      // fundamental
+      const o=ctx.createOscillator();o.type='sine';
+      o.frequency.setValueAtTime(baseFreq,now);
+      o.frequency.exponentialRampToValueAtTime(endFreq,now+dur);
+      // gentle vibrato
+      const vib=ctx.createOscillator();vib.frequency.value=4+Math.random()*2;
+      const vibG=ctx.createGain();vibG.gain.value=baseFreq*0.012;
+      vib.connect(vibG);vibG.connect(o.frequency);vib.start(now);vib.stop(now+dur+.1);
+      // harmonic (one octave up, quieter)
+      const oh=ctx.createOscillator();oh.type='sine';
+      oh.frequency.setValueAtTime(baseFreq*2,now);
+      oh.frequency.exponentialRampToValueAtTime(endFreq*2,now+dur);
+      const ohG=ctx.createGain();ohG.gain.value=0;
+      // shared envelope shape
+      const g=ctx.createGain();g.gain.setValueAtTime(0,now);
+      g.gain.linearRampToValueAtTime(.18,now+0.4);
+      g.gain.linearRampToValueAtTime(.16,now+dur*0.7);
+      g.gain.linearRampToValueAtTime(0,now+dur);
+      ohG.gain.setValueAtTime(0,now);
+      ohG.gain.linearRampToValueAtTime(.04,now+0.6);
+      ohG.gain.linearRampToValueAtTime(0,now+dur);
+      o.connect(g);oh.connect(ohG);
+      g.connect(master);ohG.connect(master);
+      o.start(now);oh.start(now);
+      o.stop(now+dur+.1);oh.stop(now+dur+.1);
+      healthyTimers.push(setTimeout(scheduleWhale,(7+Math.random()*9)*1000));
+    }
+    healthyTimers.push(setTimeout(scheduleWhale,1200));
+
+    // 4) Bubbles — short noise bursts through bandpass
+    function scheduleBubble(){
+      if(!healthyOn) return;
+      const now=ctx.currentTime;
+      const dur=0.12+Math.random()*0.14;
+      const blen=Math.floor(ctx.sampleRate*dur);
+      const bb=ctx.createBuffer(1,blen,ctx.sampleRate);
+      const bd=bb.getChannelData(0);
+      for(let i=0;i<blen;i++) bd[i]=(Math.random()*2-1)*Math.exp(-i/blen*5);
+      const src=ctx.createBufferSource();src.buffer=bb;
+      const bp=ctx.createBiquadFilter();bp.type='bandpass';
+      const startF=900+Math.random()*1800;
+      bp.frequency.setValueAtTime(startF,now);
+      bp.frequency.exponentialRampToValueAtTime(startF*1.6,now+dur);
+      bp.Q.value=4;
+      const bg=ctx.createGain();bg.gain.value=.18;
+      src.connect(bp);bp.connect(bg);bg.connect(master);
+      src.start(now);
+      healthyTimers.push(setTimeout(scheduleBubble,(1.2+Math.random()*3.2)*1000));
+    }
+    healthyTimers.push(setTimeout(scheduleBubble,1800));
+
+    // 5) Dolphin clicks — occasional short pulses
+    function scheduleClick(){
+      if(!healthyOn) return;
+      const now=ctx.currentTime;
+      // burst of 3-6 quick clicks
+      const n=3+Math.floor(Math.random()*4);
+      for(let i=0;i<n;i++){
+        const t=now+i*0.04;
+        const o=ctx.createOscillator();o.type='triangle';
+        o.frequency.value=2400+Math.random()*1800;
+        const g=ctx.createGain();
+        g.gain.setValueAtTime(.04,t);
+        g.gain.exponentialRampToValueAtTime(.001,t+.04);
+        o.connect(g);g.connect(master);
+        o.start(t);o.stop(t+.05);
+      }
+      healthyTimers.push(setTimeout(scheduleClick,(5+Math.random()*9)*1000));
+    }
+    healthyTimers.push(setTimeout(scheduleClick,4000));
+
+    healthyCtx=ctx;healthyMaster=master;
+    return true;
+  }catch(e){ console.warn('healthy audio failed',e); return false; }
+}
+
+function stopHealthyAudio(){
+  healthyTimers.forEach(t=>clearTimeout(t));
+  healthyTimers=[];
+  if(healthyCtx&&healthyMaster){
+    try{
+      healthyMaster.gain.setTargetAtTime(0,healthyCtx.currentTime,0.4);
+      const ctx=healthyCtx;
+      setTimeout(()=>{ try{ctx.close();}catch(e){} }, 1500);
+    }catch(e){}
+  }
+  healthyCtx=null;healthyMaster=null;
+}
+
+function toggleHealthy(){
+  if(healthyOn){
+    healthyOn=false;
+    stopHealthyAudio();
+    healthyEl.classList.remove('playing');
+    healthyBtn.classList.remove('on');
+    healthyBtn.textContent='▶ Listen to a healthy ocean';
+  } else {
+    healthyOn=true;
+    if(startHealthyAudio()){
+      healthyEl.classList.add('playing');
+      healthyBtn.classList.add('on');
+      healthyBtn.textContent='⏸ Pause';
+    } else {
+      healthyOn=false;
+    }
+  }
+}
+healthyBtn.addEventListener('click',toggleHealthy);
+
+// If user enables sonar audio, stop healthy ocean (and vice versa already handled above)
+const _origToggle=toggleAudio;
+toggleAudio=function(force){
+  const want=typeof force==='boolean'?force:!state.audioOn;
+  if(want&&healthyOn){ healthyOn=false; stopHealthyAudio(); healthyEl.classList.remove('playing'); healthyBtn.classList.remove('on'); healthyBtn.textContent='▶ Listen to a healthy ocean'; }
+  return _origToggle(force);
+};
+
+// ============================================================
 // Ocean canvas (lean: 5 nodes, sound rings, simple creatures)
 // ============================================================
 const cvs=document.getElementById('ocean');
@@ -963,24 +1331,46 @@ const ctx=cvs.getContext('2d',{alpha:false});
 const reduceMotion=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
 
 const SOURCES=[{x:.18,y:.42},{x:.37,y:.56},{x:.55,y:.38},{x:.72,y:.5},{x:.88,y:.44}];
-let pop=[];
+let pop=[],kelp=[],coral=[],plankton=[];
 function rngFactory(seed){let s=seed;return()=>{s=(s*9301+49297)%233280;return s/233280;};}
+const TPL={
+  whale:    {w:170,h:46,c:'oklch(50% .03 250)',sens:1,  vanish:.85,fin:true, eye:true},
+  humpback: {w:130,h:38,c:'oklch(55% .03 235)',sens:.95,vanish:.8, fin:true, eye:true},
+  shark:    {w:104,h:24,c:'oklch(48% .02 250)',sens:.55,vanish:.85,fin:true, sharkFin:true,eye:true},
+  dolphin:  {w:64, h:19,c:'oklch(68% .03 220)',sens:.9, vanish:.6, fin:true, beak:true,eye:true},
+  fish:     {w:30, h:11,c:'oklch(62% .04 215)',sens:.5, vanish:.45,fin:false,eye:true},
+  krill:    {w:5,  h:2.5,c:'oklch(72% .05 200)',sens:.2,vanish:.18,fin:false,eye:false},
+};
 function genPop(){
   const r=rngFactory(42);pop=[];
-  // simplified: 2 whales, 5 dolphins (1 pod), 8 fish, 30 krill
-  for(let i=0;i<2;i++)pop.push({type:'whale',x:r(),y:.6+r()*.25,dir:r()>.5?1:-1,phase:r()*Math.PI*2,speed:.012+r()*.008});
-  const px=r(),py=.28+r()*.15;
-  for(let i=0;i<5;i++)pop.push({type:'dolphin',x:px+(r()-.5)*.08,y:py+(r()-.5)*.05,dir:r()>.5?1:-1,phase:r()*Math.PI*2,speed:.04+r()*.02});
-  for(let i=0;i<8;i++)pop.push({type:'fish',x:r(),y:.35+r()*.35,dir:r()>.5?1:-1,phase:r()*Math.PI*2,speed:.04+r()*.025});
-  for(let i=0;i<30;i++)pop.push({type:'krill',x:r(),y:.2+r()*.6,dir:r()>.5?1:-1,phase:r()*Math.PI*2,speed:.06+r()*.04});
+  // 1 blue whale + 2 humpbacks (deep); 1 shark (mid); 1 dolphin pod of 6; 12 fish; 50 krill
+  pop.push({type:'whale',   x:r(),y:.7+r()*.18,dir:r()>.5?1:-1,phase:r()*Math.PI*2,speed:.01+r()*.008,tol:TPL.whale.vanish-.05+r()*.1});
+  for(let i=0;i<2;i++)pop.push({type:'humpback',x:r(),y:.55+r()*.25,dir:r()>.5?1:-1,phase:r()*Math.PI*2,speed:.014+r()*.008,tol:TPL.humpback.vanish-.05+r()*.1});
+  pop.push({type:'shark',   x:r(),y:.32+r()*.32,dir:r()>.5?1:-1,phase:r()*Math.PI*2,speed:.025+r()*.012,tol:TPL.shark.vanish-.05+r()*.1});
+  const px=r(),py=.22+r()*.12;
+  for(let i=0;i<6;i++)pop.push({type:'dolphin',x:px+(r()-.5)*.1, y:py+(r()-.5)*.06,dir:r()>.5?1:-1,phase:r()*Math.PI*2,speed:.04+r()*.02,tol:TPL.dolphin.vanish-.06+r()*.12});
+  for(let i=0;i<12;i++)pop.push({type:'fish',  x:r(),y:.32+r()*.35,dir:r()>.5?1:-1,phase:r()*Math.PI*2,speed:.04+r()*.025,tol:TPL.fish.vanish-.08+r()*.16});
+  for(let i=0;i<50;i++)pop.push({type:'krill', x:r(),y:.18+r()*.62,dir:r()>.5?1:-1,phase:r()*Math.PI*2,speed:.06+r()*.04,tol:TPL.krill.vanish-.05+r()*.12});
 }
-genPop();
-const TPL={
-  whale:{w:140,h:42,c:'oklch(55% .02 240)',sens:1},
-  dolphin:{w:60,h:18,c:'oklch(65% .02 230)',sens:.9},
-  fish:{w:32,h:12,c:'oklch(60% .03 220)',sens:.5},
-  krill:{w:5,h:2.5,c:'oklch(70% .04 200)',sens:.2},
-};
+function genStaticLife(){
+  const r=rngFactory(73);kelp=[];coral=[];plankton=[];
+  for(let i=0;i<7;i++){
+    kelp.push({x:.04+r()*.93,height:.2+r()*.2,sway:r()*Math.PI*2,segments:8+Math.floor(r()*4),hue:120+r()*40});
+  }
+  for(let i=0;i<5;i++){
+    const branchCount=4+Math.floor(r()*4),size=12+r()*16,branches=[];
+    for(let j=0;j<branchCount;j++){
+      const angle=-Math.PI/2+(j-branchCount/2)*.42+(r()-.5)*.25;
+      const len=size*(.55+r()*.55);
+      branches.push({dx:Math.cos(angle)*len,dy:Math.sin(angle)*len-size*.35,r:2.2+r()*1.8});
+    }
+    coral.push({x:.06+r()*.88,size,branches,hue:300+r()*70});
+  }
+  for(let i=0;i<90;i++){
+    plankton.push({x:r(),y:.12+r()*.72,drift:r()*Math.PI*2,speed:.00025+r()*.0006,tol:.08+r()*.2});
+  }
+}
+genPop();genStaticLife();
 
 let W=0,H=0,DPR=Math.min(window.devicePixelRatio||1,2);
 function resize(){
@@ -1030,6 +1420,44 @@ function draw(t){
   }
   ctx.lineTo(W,H);ctx.closePath();ctx.fill();
 
+  // coral on seabed (color desaturates / bleaches as stress rises)
+  coral.forEach(c=>{
+    const cx=c.x*W, cy=H-13;
+    const bleach=Math.min(1,stress*1.2);
+    const L=58+bleach*32, Cv=(1-bleach)*.18;
+    ctx.fillStyle='oklch('+L+'% '+Cv.toFixed(3)+' '+c.hue+')';
+    // trunk
+    ctx.beginPath();
+    ctx.moveTo(cx-2,cy);ctx.lineTo(cx+2,cy);
+    ctx.lineTo(cx+1.2,cy-c.size*.4);ctx.lineTo(cx-1.2,cy-c.size*.4);
+    ctx.closePath();ctx.fill();
+    // branch tips
+    c.branches.forEach(b=>{
+      ctx.beginPath();ctx.arc(cx+b.dx,cy+b.dy,b.r,0,Math.PI*2);ctx.fill();
+    });
+  });
+
+  // kelp strands (sway with time, sturdy under stress)
+  kelp.forEach(k=>{
+    const baseX=k.x*W, baseY=H-13, kh=k.height*H;
+    ctx.strokeStyle='oklch(38% .09 '+k.hue+' / .85)';
+    ctx.lineWidth=2.2;
+    ctx.beginPath();ctx.moveTo(baseX,baseY);
+    for(let i=1;i<=k.segments;i++){
+      const f=i/k.segments;
+      const swayAmt=Math.sin(t*.0009+k.sway+f*.8)*14*f*(1-stress*.3);
+      ctx.lineTo(baseX+swayAmt, baseY-f*kh);
+    }
+    ctx.stroke();
+    // a couple of leaf nodes
+    for(let i=2;i<k.segments;i+=2){
+      const f=i/k.segments;
+      const swayAmt=Math.sin(t*.0009+k.sway+f*.8)*14*f*(1-stress*.3);
+      ctx.fillStyle='oklch(42% .1 '+k.hue+' / .7)';
+      ctx.beginPath();ctx.ellipse(baseX+swayAmt+(i%4===0?-4:4),baseY-f*kh,5,2,0,0,Math.PI*2);ctx.fill();
+    }
+  });
+
   // emit + draw rings (only when acoustic)
   if(state.mode==='acoustic'){
     const interval=Math.max(140, 800-stress*620);
@@ -1050,11 +1478,26 @@ function draw(t){
       ctx.stroke();
       return true;
     });
-    // node dots
+    // nodes — buoy on a tether to the seabed
     SOURCES.forEach(s=>{
-      ctx.beginPath();
-      ctx.arc(s.x*W,s.y*H,3,0,Math.PI*2);
-      ctx.fillStyle='oklch(85% .15 60)';ctx.fill();
+      const x=s.x*W, y=s.y*H;
+      // tether
+      ctx.strokeStyle='oklch(40% .03 230 / .35)';
+      ctx.lineWidth=.6;
+      ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,H-13);ctx.stroke();
+      // outer housing
+      ctx.strokeStyle='oklch(85% .15 60 / .55)';
+      ctx.lineWidth=1;
+      ctx.beginPath();ctx.arc(x,y,6,0,Math.PI*2);ctx.stroke();
+      // core
+      ctx.fillStyle='oklch(85% .15 60)';
+      ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill();
+      // antenna stub
+      ctx.strokeStyle='oklch(85% .15 60 / .8)';
+      ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(x,y-6);ctx.lineTo(x,y-12);ctx.stroke();
+      ctx.fillStyle='oklch(90% .12 60)';
+      ctx.beginPath();ctx.arc(x,y-12,1.5,0,Math.PI*2);ctx.fill();
     });
   } else {
     waves.length=0;
@@ -1066,9 +1509,12 @@ function draw(t){
     ctx.setLineDash([]);
   }
 
-  // creatures
+  // creatures — fade out as stress crosses individual tolerance
   pop.forEach(c=>{
     const tmpl=TPL[c.type];
+    let alpha=1;
+    if(stress>c.tol) alpha=Math.max(0,1-(stress-c.tol)/.12);
+    if(alpha<=.04) return; // fully vanished
     const cs=Math.min(1,stress*tmpl.sens);
     const wob=cs*Math.sin(t*.008+c.phase*3)*14;
     const drift=cs*Math.cos(t*.005+c.phase)*10;
@@ -1079,21 +1525,57 @@ function draw(t){
     ctx.save();
     ctx.translate(x,y+bob);
     ctx.scale(c.dir,1);
-    ctx.globalAlpha=.85-cs*.1;
+    ctx.globalAlpha=(.88-cs*.1)*alpha;
     ctx.fillStyle=cs>.5?('oklch('+(50+cs*10)+'% '+(.08+cs*.08)+' '+(65-cs*10)+')'):tmpl.c;
+    // body
     ctx.beginPath();ctx.ellipse(0,0,w/2,h/2,0,0,Math.PI*2);ctx.fill();
+    // tail
     ctx.beginPath();
     ctx.moveTo(-w/2,0);
-    ctx.lineTo(-w/2-h*.6,-h*.55);
-    ctx.lineTo(-w/2-h*.6,h*.55);
+    ctx.lineTo(-w/2-h*.7,-h*.6);
+    ctx.lineTo(-w/2-h*.7,h*.6);
     ctx.closePath();ctx.fill();
-    if(tmpl.w>30){
+    // dorsal fin (whale-style or shark-style)
+    if(tmpl.fin){
+      ctx.beginPath();
+      if(tmpl.sharkFin){
+        ctx.moveTo(-w*.05,-h*.35);
+        ctx.lineTo(w*.08,-h*1.15);
+        ctx.lineTo(w*.22,-h*.35);
+      } else {
+        ctx.moveTo(w*.1,-h*.4);
+        ctx.lineTo(w*.2,-h*.95);
+        ctx.lineTo(w*.3,-h*.4);
+      }
+      ctx.closePath();ctx.fill();
+    }
+    // dolphin beak
+    if(tmpl.beak){
+      ctx.beginPath();
+      ctx.moveTo(w*.42,-h*.05);
+      ctx.lineTo(w*.62,h*.02);
+      ctx.lineTo(w*.42,h*.12);
+      ctx.closePath();ctx.fill();
+    }
+    // eye
+    if(tmpl.eye){
       ctx.fillStyle='oklch(95% .02 80 / '+(.4+cs*.6)+')';
-      ctx.beginPath();ctx.arc(w*.3,-h*.15,Math.max(1,h*.06),0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.arc(w*.3,-h*.15,Math.max(1.2,h*.06),0,Math.PI*2);ctx.fill();
     }
     ctx.restore();
     c.x+=c.dir*c.speed*(1+cs*2)*.003;
     if(c.x>1.1)c.x=-.1; if(c.x<-.1)c.x=1.1;
+  });
+
+  // plankton — drifting motes; first to disappear under stress
+  plankton.forEach(p=>{
+    let alpha=1;
+    if(stress>p.tol) alpha=Math.max(0,1-(stress-p.tol)*5);
+    if(alpha<=.02) return;
+    const x=(p.x+Math.sin(t*p.speed+p.drift)*.025)*W;
+    const y=(p.y+Math.cos(t*p.speed*1.4+p.drift)*.018)*H;
+    ctx.fillStyle='oklch(85% .08 220 / '+(alpha*.55).toFixed(3)+')';
+    ctx.beginPath();ctx.arc(x,y,1.3,0,Math.PI*2);ctx.fill();
   });
 
   raf=requestAnimationFrame(draw);
